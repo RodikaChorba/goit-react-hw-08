@@ -1,0 +1,51 @@
+.authNav {
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  border-radius: 16px;
+  background-color: transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navLink {
+  position: relative;
+  margin: 0 15px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #d41313;
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: none;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
+}
+
+.navLink:hover,
+.navLink.active {
+  background-color: #582c2c;
+  color: rgb(66, 196, 176);
+}
+
+.activeLink {
+  background-color: #72cd9e;
+  color: #007bff;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: blue;
+  transition: width 0.3s;
+  transform: translateX(-50%);
+}
+
+.navLink:hover::after,
+.navLink.active::after {
+  width: 100%;
+}
