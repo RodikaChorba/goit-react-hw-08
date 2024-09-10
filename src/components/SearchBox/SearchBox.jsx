@@ -1,28 +1,29 @@
+import { useId } from "react";
 import css from "./SearchBox.module.css";
-import { SlMagnifier } from "react-icons/sl";
-import { useSelector, useDispatch } from "react-redux";
-import { changeFilter } from "../../redux/filters/slice";
+import { useDispatch, useSelector } from "react-redux";
 import { selectNameFilter } from "../../redux/filters/selectors";
+import { setStatusFilter } from "../../redux/filters/slice";
 
-const SearchBox = ({}) => {
+const SearchBox = () => {
   const dispatch = useDispatch();
-
+  const filterId = useId();
   const filter = useSelector(selectNameFilter);
 
-  const handleChange = (e) => {
-    dispatch(changeFilter(e.target.value));
+  const handleFilter = (e) => {
+    const value = e.target.value;
+    dispatch(setStatusFilter(value));
   };
 
   return (
-    <div className={css.searchWrapper}>
-      <p className={css.searchP}>Find contacts by name:</p>
+    <div className={css.container}>
+      <label htmlFor={filterId}>Find contacts by name</label>
       <input
-        className={css.searchInput}
+        className={css.field}
+        id={filterId}
         type="text"
         value={filter}
-        onChange={handleChange}
+        onChange={handleFilter}
       />
-      {!filter && <SlMagnifier className={css.searchIcon} />}
     </div>
   );
 };

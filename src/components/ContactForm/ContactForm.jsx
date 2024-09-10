@@ -1,89 +1,67 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { SlPhone, SlUser } from "react-icons/sl";
-import { addContact, updateContact } from "../../redux/contacts/operations";
-import { useDispatch } from "react-redux";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useId } from "react";
 import css from "./ContactForm.module.css";
+import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { apiPostContact } from "../../redux/contacts/operations";
 
-const PHONE_REGEX = /^\d{3}-\d{2}-\d{2}$/;
-
-const ContactValidationSchema = Yup.object().shape({
-  contactName: Yup.string()
-    .required("Required")
-    .min(3, "Contact name has to be more than 3 characters")
-    .max(50, "Contact name has to be less than 50 characters"),
-  contactNumber: Yup.string()
-    .required("Required")
+const ContactSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  number: Yup.string()
     .matches(
-      PHONE_REGEX,
-      "Invalid phone number format. Please use the format 321-22-11"
-    ),
+      /^\d{3}-\d{2}-\d{2}$/,
+      "Invalid phone number format, should be ***-**-**"
+    )
+    .required("Required"),
 });
 
-const ContactForm = ({ contact = {}, onSubmit }) => {
+const initialValues = {
+  name: "",
+  number: "",
+};
+
+const ContactForm = () => {
   const dispatch = useDispatch();
-  const isEditing = Boolean(contact.id);
 
-  const initialValues = {
-    contactName: contact.name || "",
-    contactNumber: contact.number || "",
+  const handleSubmit = (values, action) => {
+    dispatch(apiPostContact(values));
+    action.resetForm();
   };
 
-  const handleSubmit = (values, actions) => {
-    const contactData = {
-      name: values.contactName,
-      number: values.contactNumber,
-    };
-
-    if (isEditing) {
-      dispatch(
-        updateContact({ id: contact.id, updatedData: contactData })
-      ).then(() => {
-        actions.resetForm();
-        if (onSubmit) {
-          onSubmit();
-        }
-      });
-    } else {
-      dispatch(addContact(contactData)).then(() => {
-        actions.resetForm();
-        if (onSubmit) {
-          onSubmit();
-        }
-      });
-    }
-  };
-
+  const nameId = useId();
+  const telId = useId();
   return (
     <Formik
       initialValues={initialValues}
-      enableReinitialize
       onSubmit={handleSubmit}
-      validationSchema={ContactValidationSchema}
+      validationSchema={ContactSchema}
     >
-      <Form className={css.contactForm} autoComplete="off">
-        <label className={css.contactLabel}>
-          <SlUser className={css.formIcon} />
-          <span className={css.contactSpanName}>Name</span>
-          <Field className={css.contactField} type="text" name="contactName" />
+      <Form className={css.container}>
+        <label htmlFor={nameId} className={css.label}>
+          Name
         </label>
-        <ErrorMessage
-          className={css.contactErr}
-          name="contactName"
-          component="span"
-        />
-        <label className={css.contactLabel}>
-          <SlPhone className={css.formIcon} />
-          <span className={css.contactSpan}>Number</span>
-          <Field className={css.contactField} type="tel" name="contactNumber" />
+        <Field
+          className={css.field}
+          type="text"
+          name="name"
+          id={nameId}
+        ></Field>
+        <ErrorMessage className={css.error} name="name" component="span" />
+        <label htmlFor={telId} className={css.label}>
+          Number
         </label>
-        <ErrorMessage
-          className={css.contactErr}
-          name="contactNumber"
-          component="span"
-        />
-        <button className={css.contactBtn} type="submit">
-          {isEditing ? "Update Contact" : "Add Contact"}
+        <Field
+          className={css.field}
+          type="tel"
+          name="number"
+          id={telId}
+        ></Field>
+        <ErrorMessage className={css.error} name="number" component="span" />
+        <button className={css.button} type="submit">
+          Add contact
         </button>
       </Form>
     </Formik>

@@ -1,32 +1,30 @@
-import { useEffect, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { lazy, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import Layout from "./Layout";
-import PrivateRoute from "./PrivateRoute";
-import RestrictedRoute from "./RegisteredRoute";
+import { RestrictedRoute } from "./RestrictedRoute";
+import { PrivateRoute } from "./PrivateRoute";
 import { refreshUser } from "./redux/auth/operations";
+import { Layout } from "./Layout";
 import { selectIsRefreshing } from "./redux/auth/selectors";
-import { Toaster } from "react-hot-toast";
 
-const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
-const RegisterPage = lazy(() => import("./pages/RegisterPage/RegisterPage"));
-const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage"));
-const ContactsPage = lazy(() => import("./pages/ContactsPage/ContactsPage"));
-const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
+const Contacts = lazy(() => import("./pages/Contacts"));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegistrationPage = lazy(() => import("./pages/RegistrationPage"));
 
 const App = () => {
   const dispatch = useDispatch();
-  const isRefreshing = useSelector(selectIsRefreshing); // {}
 
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
 
+  const isRefreshing = useSelector(selectIsRefreshing);
+
   return isRefreshing ? (
     <b>Refreshing user...</b>
   ) : (
     <Layout>
-      <Toaster position="top-right" />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route
@@ -34,7 +32,7 @@ const App = () => {
           element={
             <RestrictedRoute
               redirectTo="/contacts"
-              component={<RegisterPage />}
+              component={<RegistrationPage />}
             />
           }
         />
@@ -47,10 +45,9 @@ const App = () => {
         <Route
           path="/contacts"
           element={
-            <PrivateRoute redirectTo="/contacts" component={<ContactsPage />} />
+            <PrivateRoute redirectTo="/login" component={<Contacts />} />
           }
         />
-        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Layout>
   );

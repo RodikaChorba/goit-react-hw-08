@@ -1,60 +1,45 @@
-import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from "react-hot-toast";
+import axios from "axios";
 
-axios.defaults.baseURL = "https://connections-api.goit.global/";
-
-export const fetchContacts = createAsyncThunk(
+export const apiGetAllContacts = createAsyncThunk(
   "contacts/fetchAll",
-  async (_, thunkAPI) => {
+  async (_, thunkApi) => {
     try {
-      const { data } = await axios.get("/contacts");
+      const { data } = await axios.get(
+        "https://connections-api.goit.global/contacts"
+      );
       return data;
-    } catch (err) {
-      toast.error("Something went wrong. Please, try again later.");
-      return thunkAPI.rejectWithValue(err.message);
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.message);
     }
   }
 );
 
-export const addContact = createAsyncThunk(
+export const apiPostContact = createAsyncThunk(
   "contacts/addContact",
-  async (contactData, thunkAPI) => {
+  async (newContact, thunkApi) => {
     try {
-      const { data } = await axios.post("/contacts", contactData);
-      toast.success("Contact added successfully!");
+      const { data } = await axios.post(
+        "https://connections-api.goit.global/contacts",
+        newContact
+      );
       return data;
-    } catch (err) {
-      toast.error("Something went wrong. Please, try again later.");
-      return thunkAPI.rejectWithValue(err.message);
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.message);
     }
   }
 );
 
-export const deleteContact = createAsyncThunk(
+export const apiDeleteContact = createAsyncThunk(
   "contacts/deleteContact",
-  async (contactId, thunkAPI) => {
+  async (id, thunkApi) => {
     try {
-      const { data } = await axios.delete(`/contacts/${contactId}`);
-      toast.success("Contact deleted successfully!");
+      const { data } = await axios.delete(
+        `https://connections-api.goit.global/contacts/${id}`
+      );
       return data;
-    } catch (err) {
-      toast.error("Something went wrong. Please, try again later.");
-      return thunkAPI.rejectWithValue(err.message);
-    }
-  }
-);
-
-export const updateContact = createAsyncThunk(
-  "contacts/updateContact",
-  async ({ id, updatedData }, thunkAPI) => {
-    try {
-      const { data } = await axios.patch(`/contacts/${id}`, updatedData);
-      toast.success("Contact updated successfully!");
-      return data;
-    } catch (err) {
-      toast.error("Something went wrong. Please, try again later.");
-      return thunkAPI.rejectWithValue(err.message);
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.message);
     }
   }
 );

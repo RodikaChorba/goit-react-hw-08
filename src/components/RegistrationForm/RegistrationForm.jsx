@@ -1,22 +1,33 @@
 import { Field, Formik, Form } from "formik";
 import { useId } from "react";
-import { logIn } from "../../redux/auth/operations";
+import { register } from "../../redux/auth/operations";
 import { useDispatch } from "react-redux";
 import css from "../ContactForm/ContactForm.module.css";
 
-const LoginForm = () => {
-  const initialValues = { email: "", password: "" };
+const RegistrationForm = () => {
+  const initialValues = { name: "", email: "", password: "" };
+  const nameId = useId();
   const emailId = useId();
   const passwordId = useId();
   const dispatch = useDispatch();
   const handleSubmit = (values, action) => {
-    dispatch(logIn(values));
+    dispatch(register(values));
+    console.log(values);
     action.resetForm();
   };
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       <Form className={css.container}>
+        <label htmlFor="nameId" className={css.label}>
+          Name
+        </label>
+        <Field
+          type="text"
+          name="name"
+          id={nameId}
+          className={css.field}
+        ></Field>
         <label htmlFor="emailId" className={css.label}>
           Email
         </label>
@@ -43,4 +54,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegistrationForm;

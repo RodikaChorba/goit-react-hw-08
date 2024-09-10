@@ -1,46 +1,37 @@
-.contactListItem {
+.item {
+  border: 2px solid black;
+  border-radius: 4px;
+  padding: 10px;
+  width: 250px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 15px;
-  margin-bottom: 10px;
-  padding: 15px;
-  border: 1px solid blue;
-  border-radius: 11px;
-  background-color: transparent;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: border-bottom 0.3s ease;
+  transition: border 250ms ease-in-out;
+  margin: 10px auto;
 }
-
-.contactListItem:hover {
-  border-bottom: 3px solid darkblue;
+.item:hover {
+  border: 2px solid rgb(118, 121, 253);
 }
-
-.contactP {
-  margin: 0;
-  color: #fff;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-  margin-left: 10px;
-  background-color: transparent;
-  color: rgb(255, 255, 255);
-}
-
-.iconButton {
+.userData {
   display: flex;
-  align-items: center;
-  padding: 0;
-  border: none;
-  background: none;
-  background-color: transparent;
-  cursor: pointer;
+  flex-direction: column;
+  gap: 10px;
+  font-family: Arial, Helvetica, sans-serif;
 }
-
-.buttonGroup {
+.button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  transition:
+    background-color 250ms ease-in-out,
+    color 250ms ease-in-out;
+}
+.button:hover {
+  background-color: rgb(118, 121, 253);
+  color: white;
+}
+.line {
+  margin: 0;
   display: flex;
   gap: 10px;
-  align-items: center;
 }

@@ -1,56 +1,28 @@
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setEditingContactId,
-  clearEditingContactId,
-} from "../../redux/contacts/slice";
-import { deleteContact } from "../../redux/contacts/operations";
-import { selectEditingContactId } from "../../redux/contacts/selectors";
 import css from "./Contact.module.css";
-import ContactForm from "../ContactForm/ContactForm";
-import { MdDeleteOutline, MdOutlineCancel } from "react-icons/md";
-import { CiEdit } from "react-icons/ci";
+import { IoMdPerson } from "react-icons/io";
+import { FaPhone } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { apiDeleteContact } from "../../redux/contacts/operations";
 
 const Contact = ({ name, number, id }) => {
   const dispatch = useDispatch();
-  const editingContactId = useSelector(selectEditingContactId);
-
-  const isEditing = editingContactId === id;
-
-  const handleEditClick = () => {
-    if (isEditing) {
-      dispatch(clearEditingContactId());
-    } else {
-      dispatch(setEditingContactId(id));
-    }
-  };
-
-  const handleDelete = () => dispatch(deleteContact(id));
+  const handleDelete = () => dispatch(apiDeleteContact(id));
 
   return (
-    <li className={css.contactListItem}>
-      {isEditing ? (
-        <ContactForm
-          contact={{ name, number, id }}
-          onSubmit={() => dispatch(clearEditingContactId())}
-        />
-      ) : (
-        <>
-          <p className={css.contactP}>{name}</p>
-          <p className={css.contactP}>{number}</p>
-        </>
-      )}
-      <div className={css.buttonGroup}>
-        <button className={css.iconButton} onClick={handleEditClick}>
-          {isEditing ? (
-            <MdOutlineCancel className={css.icon} />
-          ) : (
-            <CiEdit className={css.icon} />
-          )}
-        </button>
-        <button className={css.iconButton} onClick={handleDelete}>
-          <MdDeleteOutline className={css.icon} />
-        </button>
+    <li className={css.item}>
+      <div className={css.userData}>
+        <p className={css.line}>
+          <IoMdPerson />
+          {name}
+        </p>
+        <p className={css.line}>
+          <FaPhone />
+          {number}
+        </p>
       </div>
+      <button className={css.button} type="button" onClick={handleDelete}>
+        Delete
+      </button>
     </li>
   );
 };
